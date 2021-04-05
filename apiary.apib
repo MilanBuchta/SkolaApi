@@ -1,0 +1,197 @@
+FORMAT: 1A
+
+# Skola API 
+
+Jednoduche API pre pristup k skolskemu informacnemu systemu
+## Overview
+### Dovolene HTTPs poziadavky
+<code>
+PUT     : Vytvorenie objektu<br />
+POST    : Upravenie objektu<br />
+GET     : Ziskanie kolekcie objektov<br />
+DELETE  : Vymazanie objektu<br />
+</code>
+### Opis bežných odpovedí servera
+<ul>
+  <li>200 <code>OK</code> - požiadavka bola úspešná (niektoré volania API sa môžu vrátiť miesto 201).</li>
+  <li>201 <code>Vytvorené</code> - žiadosť bola úspešná a bol vytvorený zdroj.</li>
+  <li>204 <code>Žiadny obsah</code> - žiadosť bola úspešná, ale neexistuje žiadne zobrazenie, ktoré by sa malo vrátiť (t. J. Odpoveď je prázdna).</li>
+  <li>400 <code>Bad Request</code> - žiadosť sa nedala pochopiť alebo chýbali požadované parametre.</li>
+  <li>401 <code>Neautorizované</code> - overenie zlyhalo alebo používateľ nemá povolenie na požadovanú operáciu.</li>
+  <li>403 <code>Zakázané</code> - prístup bol odmietnutý.</li>
+  <li>404 <code>Nenajdene</code> - zdroj nebol nájdený.</li>
+  <li>405 <code>Metóda nie je povolená</code> - požadovaná metóda nie je podporovaná pre zdroj.</li>
+</ul>
+
+
+# Students
+API pracujuce z udajmi o studentoch
+
+## Zoznam kolekcia studentov [/students{?odDatNarod,limit}]
+
++ Parameters
+    + odDatNarod (optional,string,`2020-10-01T15`) ... Timestamp vo formate YYYY-MM-DDTHH
+    + limit (optional,number,`15`) ... maximalny pocet zaznamov
+    
+### Zoznam vsetkych studentov [GET]
+
+Vrati zoznam vsetkych studentov
+
++ Response 200 (application/json)
+
+        [
+           {
+            "id": "1",
+            "meno": "Janko",
+            "priezvisko": "Hrasko",
+            "datumNarodenia": "18.05.1990",
+            "email": [
+              "janko.hrasko@fri.uniza.sk",
+              "hrasko1@uniza.sk"
+            ],
+            "kruzokID": "1"
+          },
+          {
+            "id": "2",
+            "meno": "Jozef",
+            "priezvisko": "Mak",
+            "datumNarodenia": "01.01.1991",
+            "email": [
+              "jozef.mak@fri.uniza.sk",
+              "mak1@uniza.sk"
+            ],
+            "kruzokID": "1"
+          }
+        ]
+
++ Response 401 (application/json)
+
+        {
+          "error": "error.unauthorized"
+        }
+
+## Zoznam kolekcia studentov [/students]
+### Pridat studenta [PUT]
+Vytvorenie noveho studenta v systeme
+
++ Request (application/json)
+
+        {
+          "meno": "Jozef",
+          "priezvisko": "Mak",
+          "datumNarodenia": "01.01.1991",
+          "email": [
+            "jozef.mak@fri.uniza.sk",
+            "mak1@uniza.sk"
+          ],
+          "kruzokID": "1"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /students/2
+
+    + Body
+
+            {
+              "id": "2",
+              "meno": "Jozef",
+              "priezvisko": "Mak",
+              "datumNarodenia": "01.01.1991",
+              "email": [
+                "jozef.mak@fri.uniza.sk",
+                "mak1@uniza.sk"
+              ],
+              "kruzokID": "1"
+            }
+        
+## Student [/students/{id}]
+
++ Parameters
+    + id (required, number, `1`) ... Id cislo studenta, ktoreho zaznam chceme ziskat
+    
+    
+### Ziskaj zaznam jedneho studenta [GET]
+
+Jeden Objekt Student
+
++ Response 200 (application/json)
+
+    + Headers
+
+            X-My-Header: The Value
+
+    + Body
+
+            {
+              "id": "1",
+              "meno": "Janko",
+              "priezvisko": "Hrasko",
+              "datumNarodenia": "18.05.1990",
+              "email": [
+                "janko.hrasko@fri.uniza.sk",
+                "hrasko1@uniza.sk"
+              ],
+              "kruzokID": "1"
+            }
+            
++ Response 401 (application/json)
+
+        {
+          "error": "error.unauthorized"
+        }
+        
+### Uprav zaznam Studenta [POST]        
+
+Upravit zaznam jedneho studenta
+
++ Request (application/json)
+
+        {
+          "id": "1",
+          "meno": "Janko",
+          "priezvisko": "Hrasko",
+          "datumNarodenia": "18.05.1990",
+          "email": [
+            "janko.hrasko@fri.uniza.sk",
+            "hrasko1@uniza.sk",
+            "dalsimail@uniza.sk"
+          ],
+          "kruzokID": "2"
+        }
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+              "id": "1",
+              "meno": "Janko",
+              "priezvisko": "Hrasko",
+              "datumNarodenia": "18.05.1990",
+              "email": [
+                "janko.hrasko@fri.uniza.sk",
+                "hrasko1@uniza.sk",
+                "dalsimail@uniza.sk"
+              ],
+              "kruzokID": "2"
+            }
+            
++ Response 401 (application/json)
+
+        {
+          "error": "error.unauthorized"
+        }           
+                    
+### Odstranenie Studenta [DELETE]   
+
+Odstranennie zaznamu studenta
+
++ Response 204
+
++ Response 401 (application/json)
+    
+        {
+          "error": "error.unauthorized"
+        }
