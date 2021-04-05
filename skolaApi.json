@@ -1,0 +1,268 @@
+{
+    "source": "mockoon:1.12.0",
+    "data": [
+        {
+            "type": "environment",
+            "item": {
+                "uuid": "",
+                "lastMigration": 13,
+                "name": "Skola API",
+                "endpointPrefix": "",
+                "latency": 0,
+                "port": 3001,
+                "routes": [
+                    {
+                        "uuid": "",
+                        "documentation": "Vrati zoznam vsetkych studentov",
+                        "method": "get",
+                        "endpoint": "students",
+                        "responses": [
+                            {
+                                "uuid": "",
+                                "body": "{\r\n  \"error\": \"error.unauthorized\"\r\n}",
+                                "latency": 0,
+                                "statusCode": 401,
+                                "label": "",
+                                "headers": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            },
+                            {
+                                "uuid": "",
+                                "body": "\n{{ setVar 'varname' (queryParam 'odDatNarod' '2019-01-01') }}\n{\n [\n    {{# repeat (queryParam 'limit' '10') }}\n      {\n        \"id\": \"{{ faker 'random.number' min=10000 max=100000 }}\",\n        \"meno\": \"{{ faker 'name.firstName' }}\",\n        \"priezvisko\": \"{{ faker 'name.lastName' }}\",\n        \"datumNarodenia\": \"{{date varname '2019-01-30' 'YYYY-MM-DD'}}\",\n        \"email\": [\n          {{# repeat (faker 'random.number' 5) }}\n            \"{{ faker 'internet.email' }}\"\n          {{/ repeat }}\n        ],\n        \"kruzokID\": \"{{ faker 'random.number' min=10000 max=100000 }}\",\n      },\n    {{/ repeat }}\n  ]\n}",
+                                "latency": 0,
+                                "statusCode": 200,
+                                "label": "",
+                                "headers": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [
+                                    {
+                                        "target": "header",
+                                        "modifier": "Authorization",
+                                        "value": "123",
+                                        "isRegex": true
+                                    }
+                                ],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            }
+                        ],
+                        "enabled": true,
+                        "randomResponse": false
+                    },
+                    {
+                        "uuid": "",
+                        "documentation": "Vytvorenie noveho studenta v systeme",
+                        "method": "put",
+                        "endpoint": "students",
+                        "responses": [
+                            {
+                                "uuid": "",
+                                "body": "\r\n{{ setVar 'userId' (faker 'random.number' min=10000 max=100000) }}\r\n\r\n{\r\n  \"id\": \"{{userId}}\",\r\n  \"meno\": \"{{body 'meno'}}\",\r\n  \"priezvisko\": \"{{body 'priezvisko'}}\",\r\n  \"datumNarodenia\": \"{{body 'datumNarodenia'}}\",\r\n  \"email\": \"{{body 'email'}}\",\r\n  \"kruzokID\": \"{{body 'kruzokID'}}\"\r\n}",
+                                "latency": 0,
+                                "statusCode": 201,
+                                "label": "",
+                                "headers": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Location",
+                                        "value": "/students/{{userId}}"
+                                    }
+                                ],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            }
+                        ],
+                        "enabled": true,
+                        "randomResponse": false
+                    },
+                    {
+                        "uuid": "",
+                        "documentation": "ziskat jeden Objekt Student",
+                        "method": "get",
+                        "endpoint": "students/:id",
+                        "responses": [
+                            {
+                                "uuid": "",
+                                "body": "{\r\n  \"error\": \"error.unauthorized\"\r\n}",
+                                "latency": 0,
+                                "statusCode": 401,
+                                "label": "",
+                                "headers": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            },
+                            {
+                                "uuid": "",
+                                "body": "{\r\n  \"id\": \"{{urlParam 'id'}}\",\r\n  \"meno\": \"{{ faker 'name.firstName' }}\",\r\n  \"priezvisko\": \"{{ faker 'name.lastName' }}\",\r\n  \"datumNarodenia\": \"{{date '2019-01-01' '2090-01-30' 'YYYY-MM-DD'}}\",\r\n  \"email\": [\r\n  {{# repeat (faker 'random.number' 5) }}\r\n      \"{{ faker 'internet.email' }}\"\r\n  {{/ repeat }}\r\n  ],\r\n  \"kruzokID\": \"{{ faker 'random.number' min=10000 max=100000 }}\",\r\n}",
+                                "latency": 0,
+                                "statusCode": 200,
+                                "label": "",
+                                "headers": [
+                                    {
+                                        "key": "X-My-Header",
+                                        "value": "The Value"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [
+                                    {
+                                        "target": "header",
+                                        "modifier": "Authorization",
+                                        "value": "123",
+                                        "isRegex": true
+                                    }
+                                ],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            }
+                        ],
+                        "enabled": true,
+                        "randomResponse": false
+                    },
+                    {
+                        "uuid": "",
+                        "documentation": "Upravit zaznam jedneho studenta",
+                        "method": "post",
+                        "endpoint": "students/:id",
+                        "responses": [
+                            {
+                                "uuid": "",
+                                "body": "{\r\n  \"error\": \"error.unauthorized\"\r\n}",
+                                "latency": 0,
+                                "statusCode": 401,
+                                "label": "",
+                                "headers": [],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            },
+                            {
+                                "uuid": "",
+                                "body": "{\r\n  \"id\": \"{{urlParam 'id'}}\",\r\n  \"meno\": \"{{body 'meno'}}\",\r\n  \"priezvisko\": \"{{body 'priezvisko'}}\",\r\n  \"datumNarodenia\": \"{{body 'datumNarodenia'}}\",\r\n  \"email\": \"{{body 'email'}}\",\r\n  \"kruzokID\": \"{{body 'kruzokID'}}\"\r\n}",
+                                "latency": 0,
+                                "statusCode": 200,
+                                "label": "Upravit zaznam jedneho studenta",
+                                "headers": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [
+                                    {
+                                        "target": "header",
+                                        "modifier": "Authorization",
+                                        "value": "123",
+                                        "isRegex": true
+                                    }
+                                ],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            }
+                        ],
+                        "enabled": true,
+                        "randomResponse": false
+                    },
+                    {
+                        "uuid": "",
+                        "documentation": "Vymazanie studenta",
+                        "method": "delete",
+                        "endpoint": "students/:id",
+                        "responses": [
+                            {
+                                "uuid": "",
+                                "body": "{\r\n  \"error\": \"error.unauthorized\"\r\n}",
+                                "latency": 0,
+                                "statusCode": 401,
+                                "label": "",
+                                "headers": [],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            },
+                            {
+                                "uuid": "",
+                                "body": "{}",
+                                "latency": 0,
+                                "statusCode": 204,
+                                "label": "",
+                                "headers": [],
+                                "filePath": "",
+                                "sendFileAsBody": false,
+                                "rules": [
+                                    {
+                                        "target": "header",
+                                        "modifier": "Authorization",
+                                        "value": "123",
+                                        "isRegex": true
+                                    }
+                                ],
+                                "rulesOperator": "OR",
+                                "disableTemplating": false
+                            }
+                        ],
+                        "enabled": true,
+                        "randomResponse": false
+                    }
+                ],
+                "proxyMode": false,
+                "proxyHost": "",
+                "https": false,
+                "cors": true,
+                "headers": [],
+                "proxyReqHeaders": [
+                    {
+                        "key": "",
+                        "value": ""
+                    }
+                ],
+                "proxyResHeaders": [
+                    {
+                        "key": "",
+                        "value": ""
+                    }
+                ]
+            }
+        }
+    ]
+}
